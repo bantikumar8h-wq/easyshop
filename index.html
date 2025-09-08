@@ -993,3 +993,58 @@ function showCartNotification(message) {
 <button onclick="addToCart(1, 'Samsung Galaxy M34', 15999)">Add to Cart</button>
 <button onclick="addToCart(2, 'Nike T-Shirt', 899)">Add to Cart</button>
 <button onclick="viewCart()">View Cart</button>
+<script>
+    // Add to Cart function
+    function addToCart(id) {
+        // Product data directly HTML se uthao
+        let productCard = document.querySelector(`.product-card[data-id="${id}"]`);
+        let name = productCard.getAttribute("data-name");
+        let price = parseInt(productCard.getAttribute("data-price"));
+
+        // Cart ko localStorage se load karo
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Agar product pehle se hai to qty badhao
+        let existing = cart.find(item => item.id == id);
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ id: id, name: name, price: price, qty: 1 });
+        }
+
+        // localStorage update karo
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Notification show
+        showCartNotification(name + " added to cart!");
+    }
+
+    // Buy Now button
+    function buyNow(id) {
+        addToCart(id);
+        window.location.href = "cart.html"; // direct cart page
+    }
+
+    // View Cart (temporary popup)
+    function viewCart() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart.length === 0) {
+            alert("🛒 Cart is empty!");
+        } else {
+            let items = cart.map(i => `${i.name} (x${i.qty}) - ₹${i.price * i.qty}`).join("\n");
+            alert("Your Cart:\n" + items);
+        }
+    }
+
+    // Cart notification popup
+    function showCartNotification(message) {
+        let notif = document.createElement("div");
+        notif.className = "cart-notification show";
+        notif.innerText = message;
+        document.body.appendChild(notif);
+
+        setTimeout(() => {
+            notif.remove();
+        }, 3000);
+    }
+</script>
