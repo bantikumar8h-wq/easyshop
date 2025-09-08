@@ -952,3 +952,44 @@
     });
   }
 </script>
+<script>
+// Cart ko localStorage me save karna
+function addToCart(productId, productName, productPrice) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Check if product already in cart
+    let existing = cart.find(item => item.id === productId);
+    if (existing) {
+        existing.qty += 1; // quantity increase
+    } else {
+        cart.push({ id: productId, name: productName, price: productPrice, qty: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Notification
+    showCartNotification(productName + " added to cart!");
+}
+
+// Cart ka data read karke console me dekhna
+function viewCart() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log("🛒 Cart:", cart);
+    alert("Items in Cart: " + cart.map(i => i.name + " (x" + i.qty + ")").join(", "));
+}
+
+// Cart notification popup
+function showCartNotification(message) {
+    let notif = document.createElement("div");
+    notif.className = "cart-notification show";
+    notif.innerText = message;
+    document.body.appendChild(notif);
+
+    setTimeout(() => {
+        notif.remove();
+    }, 3000);
+}
+</script>
+<button onclick="addToCart(1, 'Samsung Galaxy M34', 15999)">Add to Cart</button>
+<button onclick="addToCart(2, 'Nike T-Shirt', 899)">Add to Cart</button>
+<button onclick="viewCart()">View Cart</button>
