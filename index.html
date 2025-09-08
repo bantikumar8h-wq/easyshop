@@ -909,3 +909,46 @@
   </script>
 </body>
 </html>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+<script>
+  // Firebase config (apna bana lena console.firebase.google.com se)
+  const firebaseConfig = {
+    apiKey: "YOUR_KEY",
+    authDomain: "YOUR_APP.firebaseapp.com",
+    projectId: "YOUR_APP",
+    storageBucket: "YOUR_APP.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // Signup
+  function signup(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      alert("Signup Successful!");
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+  }
+
+  // Login
+  function login(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      alert("Login Successful!");
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+  }
+</script>
